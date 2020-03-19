@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as actionTypes from '../../store/actions';
 
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
@@ -49,7 +50,9 @@ class Counter extends Component {
         <CounterControl label="Add 5" clicked={this.props.onAdd} />
         <CounterControl label="Subtract 5" clicked={this.props.onSubtract} />
         <hr />
-        <button onClick={this.props.storeResult}>Store Result</button>
+        <button onClick={() => this.props.storeResult(this.props.ctr)}>
+          Store Result
+        </button>
         <ul>
           {this.props.results.map((result, index) => (
             <li onClick={() => this.props.removeResult(index)} key={index}>
@@ -64,19 +67,19 @@ class Counter extends Component {
 
 const mapStateToProps = state => {
   return {
-    ctr: state.counter,
-    results: state.results
+    ctr: state.cnt.counter,
+    results: state.res.results
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onIncrementCounter: () => dispatch({ type: 'INCREMENT' }),
-    onDecrementCounter: () => dispatch({ type: 'DECREMENT' }),
-    onAdd: () => dispatch({ type: 'ADD', val: 5 }),
-    onSubtract: () => dispatch({ type: 'SUBTRACT', val: 5 }),
-    storeResult: () => dispatch({ type: 'STORE' }),
-    removeResult: index => dispatch({ type: 'REMOVE', index })
+    onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENET }),
+    onDecrementCounter: () => dispatch({ type: actionTypes.DECREMENT }),
+    onAdd: () => dispatch({ type: actionTypes.ADD, val: 5 }),
+    onSubtract: () => dispatch({ type: actionTypes.SUBTRACT, val: 5 }),
+    storeResult: val => dispatch({ type: actionTypes.STORE, val }),
+    removeResult: index => dispatch({ type: actionTypes.REMOVE, index })
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Counter);
